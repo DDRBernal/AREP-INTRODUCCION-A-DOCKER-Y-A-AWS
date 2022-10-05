@@ -6,6 +6,7 @@ import org.bson.Document;
 import org.bson.types.ObjectId;
 
 
+import javax.print.Doc;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -46,8 +47,10 @@ public class MongoDB {
 
         List<Document> databases = mongoClient.listDatabases().into(new ArrayList<>());
         System.out.println(databases.size());
-        databases.forEach(db -> System.out.println(db.toJson()));
 
+        List<Document> lastElementsArray = databases.subList(Math.max(databases.size() - 1, 0), databases.size());
+
+        databases.forEach(db -> System.out.println(db.toJson()));
         //Obtener objeto base de datos. Si no existe lo crea
         MongoDatabase database = mongoClient.getDatabase("myFirstDatabase");
         //Obtener objeto colección. Si no existe lo crea
