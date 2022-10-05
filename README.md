@@ -1,6 +1,5 @@
 # AREP 
 
-[![ProjectDesign](https://www.herokucdn.com/deploy/button.png)](https://areparquitectura.herokuapp.com/)
 
 https://phoenixnap.com/kb/create-database-mongodb
 https://www.tutorialspoint.com/mongodb/mongodb_create_database.htm
