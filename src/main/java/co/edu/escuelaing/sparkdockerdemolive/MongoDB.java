@@ -16,12 +16,9 @@ public class MongoDB {
 
     private static MongoClient mongoClient;
     private static MongoDatabase database;
-<<<<<<< HEAD
-=======
     public static void main(String[] args) {
         MongoConnection();
     }
->>>>>>> a12c2930f4721d3b9bfcc5aeeab869cee50a546e
 
     public static void MongoConnection(){
 
@@ -44,7 +41,6 @@ public class MongoDB {
         List<Document> lastElementsArray = databases.subList(Math.max(databases.size() - 1, 0), databases.size());
         databases.forEach(db -> System.out.println(db.toJson()));
         database = mongoClient.getDatabase("AREPmongoDB");
-<<<<<<< HEAD
     }
 
     public static void insertMessage(String message) {
@@ -62,36 +58,13 @@ public class MongoDB {
         customers.insertOne(messages);
     }
 
-=======
-    }
-
-    public static void insertMessage(String message) {
-        MongoDatabase database = mongoClient.getDatabase("AREPmongoDB");
-        MongoCollection<Document> customers = database.getCollection("messages");
-        FindIterable<Document> iterable = customers.find();
-        MongoCursor<Document> cursor = iterable.iterator();
-        while (cursor.hasNext()) {
-            System.out.println(cursor.next());
-        }
-        Document messages = new Document("_id", new ObjectId());
-        ArrayList<String> data = getData();
-        String messageEdited = message.replace("{\"word\":","").replace("}","");
-        messages.append("message"+data.size(), messageEdited);
-        customers.insertOne(messages);
-    }
-
->>>>>>> a12c2930f4721d3b9bfcc5aeeab869cee50a546e
     public static ArrayList<String> getData(){
         ArrayList<String> data = new ArrayList<>();
         MongoCollection<Document> customers = database.getCollection("messages");
         FindIterable<Document> iterable = customers.find();
         MongoCursor<Document> cursor = iterable.iterator();
         for (Document d : iterable) {
-<<<<<<< HEAD
-//            System.out.println(d);
-=======
             System.out.println(d);
->>>>>>> a12c2930f4721d3b9bfcc5aeeab869cee50a546e
             data.add(d.toString());
         }
         return data;
