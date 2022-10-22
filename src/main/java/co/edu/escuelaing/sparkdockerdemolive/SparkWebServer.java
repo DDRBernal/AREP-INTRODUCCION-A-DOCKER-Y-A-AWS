@@ -24,6 +24,7 @@ public class SparkWebServer {
         MongoDB.MongoConnection();
         port(getPort());
         System.out.println(getPort());
+        RoundRobin roundRobin = new RoundRobin();
         staticFiles.location("/files");
         get("hello", (req,res) -> "Hello Docker!");
         get("/home", (req,res) -> {
@@ -31,14 +32,15 @@ public class SparkWebServer {
         });
         get("/showWords", (req,res) -> {
             ArrayList<String> data = MongoDB.getData();
-            System.out.println(data.size());
+            String serverRoundRobin = roundRobin.getServer();
+            System.out.println("server: "+serverRoundRobin);
             return data;
         });
         post("/addWord", (req, res) -> {
             res.status(200);
-            MongoDB.insertMessage(req.body());
-            String serverRoundRobin = RoundRobin.getServer();
+            String serverRoundRobin = roundRobin.getServer();
             System.out.println("server: "+serverRoundRobin);
+            MongoDB.insertMessage(req.body());
             return "word added";
         });
     }

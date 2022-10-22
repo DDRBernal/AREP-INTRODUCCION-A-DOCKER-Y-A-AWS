@@ -22,7 +22,6 @@ var app = (function () {
     if (data !== undefined) {
       datanew = data.split("},");
       datanew = datanew.slice(Math.max(datanew.length - 10, 0))
-      console.log(datanew);
       datanew.forEach(function replace(item){
           item = item.replace("Document{{","{").replace("[","").replace("}]","");
           object = []
@@ -34,7 +33,6 @@ var app = (function () {
                 `
             );
       });
-
     } else {
         alert("Data not found!");
     }

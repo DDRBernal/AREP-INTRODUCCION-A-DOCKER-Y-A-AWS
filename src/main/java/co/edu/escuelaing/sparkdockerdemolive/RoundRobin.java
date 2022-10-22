@@ -14,7 +14,7 @@ public class RoundRobin {
         serverMap.put("35002", 3);
     }
 
-    public static String getServer() {
+    public String getServer() {
         ArrayList<String> serverList = new ArrayList<>();
         Set<String> serverSet = serverMap.keySet();
         Iterator<String> iterator = serverSet.iterator();

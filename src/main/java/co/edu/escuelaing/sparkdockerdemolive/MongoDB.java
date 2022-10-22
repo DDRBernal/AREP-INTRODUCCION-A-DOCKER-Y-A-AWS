@@ -61,7 +61,7 @@ public class MongoDB {
         FindIterable<Document> iterable = customers.find();
         MongoCursor<Document> cursor = iterable.iterator();
         for (Document d : iterable) {
-            System.out.println(d);
+//            System.out.println(d);
             data.add(d.toString());
         }
         return data;
