@@ -14,9 +14,8 @@ import java.util.List;
 
 public class MongoDB {
 
-    public static void main(String[] args) {
-        MongoConnection();
-    }
+    private static MongoClient mongoClient;
+    private static MongoDatabase database;
 
     public static void MongoConnection(){
 
@@ -24,60 +23,47 @@ public class MongoDB {
         //URL para Atlasdb en la nube
         //              "mongodb+srv://admin:<password>@cluster0.85ubqzs.mongodb.net/?retryWrites=true&w=majority"
         String connstr ="mongodb+srv://admin:admin@cluster0.85ubqzs.mongodb.net/?retryWrites=true&w=majority";
-
         //URL para conexión local
         //String connstr ="mongodb://localhost:27017/?retryWrites=true&w=majority";
-
         //Crea objeto de tipo ConnectionString
         ConnectionString connectionString = new ConnectionString(connstr);
-
-        //Crea objeto con configuraciones para el cliente mongo
         MongoClientSettings settings = MongoClientSettings.builder()
                 .applyConnectionString(connectionString)
                 .serverApi(ServerApi.builder()
                         .version(ServerApiVersion.V1)
                         .build())
                 .build();
-
-        //Crea una instancia del cliente mongo conectado a la base de datos
-        MongoClient mongoClient = MongoClients.create(settings);
-
-        //Obtiene una lista de objetos bson representando las base de datos disponibles
-        // bson es una versión binaria de json creada para mejorar desempeño de mongo.
-
+        mongoClient = MongoClients.create(settings);
         List<Document> databases = mongoClient.listDatabases().into(new ArrayList<>());
-        System.out.println(databases.size());
-
         List<Document> lastElementsArray = databases.subList(Math.max(databases.size() - 1, 0), databases.size());
-
         databases.forEach(db -> System.out.println(db.toJson()));
-        //Obtener objeto base de datos. Si no existe lo crea
-        MongoDatabase database = mongoClient.getDatabase("myFirstDatabase");
-        //Obtener objeto colección. Si no existe lo crea
-        MongoCollection<Document> customers = database.getCollection("customer");
-
-        //Obtiene un iterable
-        FindIterable<Document> iterable = customers.find();
-        MongoCursor<Document> cursor = iterable.iterator();
-
-        //Recorre el iterador obtenido del iterable
-        while (cursor.hasNext()) {
-            System.out.println(cursor.next());
-        }
-
-        //Crea un documento BSON con el cliente
-        Document customer = new Document("_id", new ObjectId());
-        customer.append("firstName", "David");
-        customer.append("lastName", "Otálora");
-        customer.append("_class", "co.edu.escuelaing.mongodemo.Customer.Customer");
-
-        //Agrega el nuevo cliente a la colección
-        customers.insertOne(customer);
-
-        //Lee el iterable directamente para imprimir documentos
-        for (Document d : iterable) {
-            System.out.println(d);
-        }
+        database = mongoClient.getDatabase("AREPmongoDB");
     }
 
+    public static void insertMessage(String message) {
+        MongoDatabase database = mongoClient.getDatabase("AREPmongoDB");
+        MongoCollection<Document> customers = database.getCollection("messages");
+        FindIterable<Document> iterable = customers.find();
+        MongoCursor<Document> cursor = iterable.iterator();
+//        while (cursor.hasNext()) {
+//            System.out.println(cursor.next());
+//        }
+        Document messages = new Document("_id", new ObjectId());
+        ArrayList<String> data = getData();
+        String messageEdited = message.replace("{\"word\":","").replace("}","");
+        messages.append("message"+data.size(), messageEdited);
+        customers.insertOne(messages);
+    }
+
+    public static ArrayList<String> getData(){
+        ArrayList<String> data = new ArrayList<>();
+        MongoCollection<Document> customers = database.getCollection("messages");
+        FindIterable<Document> iterable = customers.find();
+        MongoCursor<Document> cursor = iterable.iterator();
+        for (Document d : iterable) {
+            System.out.println(d);
+            data.add(d.toString());
+        }
+        return data;
+    }
 }
